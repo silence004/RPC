@@ -1,0 +1,42 @@
+package com.silence004;
+
+import com.silence004.config.RpcConfig;
+import com.silence004.model.ServiceMetaInfo;
+import com.silence004.register.LocalRegistry;
+import com.silence004.register.Registry;
+import com.silence004.register.RegistryFactory;
+import com.silence004.service.HttpServer;
+import com.silence004.service.UserService;
+import com.silence004.service.UserServiceImpl;
+import com.silence004.service.impl.VertxHttpServer;
+
+public class Provider {
+
+    public static void main(String[] args) {
+
+        RpcApplication.init();
+
+        String serviceName = UserService.class.getName();
+        LocalRegistry.register(serviceName,UserServiceImpl.class);
+
+        RpcConfig rpcConfig=RpcApplication.getRpcConfig();
+        Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+        ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+        serviceMetaInfo.setServiceName(serviceName);
+        serviceMetaInfo.setServiceHost(rpcConfig.getServeHost());
+        serviceMetaInfo.setSerivePort(rpcConfig.getServePort());
+        try {
+            registry.register(serviceMetaInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        //启动web服务
+        HttpServer httpServer = new VertxHttpServer();
+        //监听全局配置中的端口
+        httpServer.doStart(rpcConfig.getServePort());
+
+    }
+
+}

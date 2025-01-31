@@ -1,0 +1,2 @@
+json=com.silence004.serialize.impl.JsonSerializer
+hessian=com.silence004.serialize.impl.HessianSerializer

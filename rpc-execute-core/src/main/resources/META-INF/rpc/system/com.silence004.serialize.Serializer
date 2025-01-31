@@ -1,0 +1,2 @@
+jdk=com.silence004.serialize.impl.JdkSerializer
+kryo=com.silence004.serialize.impl.KryoSerializer
