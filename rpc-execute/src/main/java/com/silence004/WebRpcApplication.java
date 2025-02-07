@@ -1,7 +1,6 @@
 package com.silence004;
 
-import com.silence004.service.impl.VertxHttpServer;
-import org.springframework.boot.SpringApplication;
+import com.silence004.service.http.impl.VertxHttpServer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication

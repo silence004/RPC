@@ -33,8 +33,8 @@ public class Consumer {
 
         UserService proxy = ServiceProxyFactory.getProxy(UserService.class);
         System.out.println(proxy.getUser(new User("silence004")));
-        System.out.println(proxy.getUser(new User("silence004")));
-        System.out.println(proxy.getUser(new User("silence004")));
+        System.out.println(proxy.getUser(new User("silence001")));
+        System.out.println(proxy.getUser(new User("silence002")));
 
 
 

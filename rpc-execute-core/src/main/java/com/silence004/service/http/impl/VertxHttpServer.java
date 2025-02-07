@@ -1,7 +1,7 @@
-package com.silence004.service.impl;
+package com.silence004.service.http.impl;
 
 import com.silence004.service.HttpServer;
-import com.silence004.http.HttpServerHandler;
+import com.silence004.service.http.HttpServerHandler;
 import io.vertx.core.Vertx;
 
 public class VertxHttpServer implements HttpServer {

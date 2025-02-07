@@ -1,12 +1,14 @@
 package com.silence004.protocol.Enum;
 
 import cn.hutool.core.util.ObjectUtil;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public enum ProtocolMessageSerializerEnum {
     JDK(0,"jdk"),
     JSON(1,"json"),

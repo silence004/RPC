@@ -1,4 +1,4 @@
-package com.silence004.http;
+package com.silence004.service.http;
 
 import com.silence004.RpcApplication;
 import com.silence004.register.LocalRegistry;
@@ -6,7 +6,6 @@ import com.silence004.request.RpcRequest;
 import com.silence004.response.RpcResponse;
 import com.silence004.serialize.Serializer;
 import com.silence004.serialize.SerializerFactory;
-import com.silence004.serialize.impl.JdkSerializer;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;

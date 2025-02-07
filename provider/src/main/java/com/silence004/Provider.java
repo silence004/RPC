@@ -8,7 +8,9 @@ import com.silence004.register.RegistryFactory;
 import com.silence004.service.HttpServer;
 import com.silence004.service.UserService;
 import com.silence004.service.UserServiceImpl;
-import com.silence004.service.impl.VertxHttpServer;
+import com.silence004.service.http.impl.VertxHttpServer;
+import com.silence004.service.tcp.VertxTcpClient;
+import com.silence004.service.tcp.impl.VertxTcpServe;
 
 public class Provider {
 
@@ -23,6 +25,7 @@ public class Provider {
         Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
         ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName(serviceName);
+        serviceMetaInfo.setServiceVersion(rpcConfig.getVersion());
         serviceMetaInfo.setServiceHost(rpcConfig.getServeHost());
         serviceMetaInfo.setSerivePort(rpcConfig.getServePort());
         try {
@@ -32,10 +35,16 @@ public class Provider {
         }
 
 
-        //启动web服务
-        HttpServer httpServer = new VertxHttpServer();
-        //监听全局配置中的端口
-        httpServer.doStart(rpcConfig.getServePort());
+//        //启动web服务
+//        HttpServer httpServer = new VertxHttpServer();
+//        //监听全局配置中的端口
+//        httpServer.doStart(rpcConfig.getServePort());
+
+        //启动tcp服务
+        VertxTcpServe vertxTcpServe = new VertxTcpServe();
+        vertxTcpServe.doStart(rpcConfig.getServePort()==null?8081:rpcConfig.getServePort());
+
+
 
     }
 
