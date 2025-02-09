@@ -7,6 +7,8 @@ import cn.hutool.http.HttpResponse;
 import com.silence004.RpcApplication;
 import com.silence004.config.RpcConfig;
 import com.silence004.constant.RpcConstant;
+import com.silence004.loadbalancer.LoadBalancer;
+import com.silence004.loadbalancer.LoadBalancerFactory;
 import com.silence004.protocol.Enum.ProtocolMessageSerializerEnum;
 import com.silence004.protocol.Enum.ProtocolMessageStatusEnum;
 import com.silence004.protocol.Enum.ProtocolMessageTypeEnum;
@@ -31,7 +33,9 @@ import io.vertx.core.net.NetSocket;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 //JDK动态代理
@@ -64,7 +68,15 @@ public class ServiceProxy implements InvocationHandler {
             if (CollUtil.isEmpty(serviceMetaInfoList)) {
                 throw new RuntimeException("暂无服务地址");
             }
-            ServiceMetaInfo selectedserviceMetaInfo = serviceMetaInfoList.get(0);
+            //-----服务节点选择-----
+            //方式1：直接获取首节点
+//            ServiceMetaInfo selectedserviceMetaInfo = serviceMetaInfoList.get(0);
+
+            //方式2：负载均衡
+            LoadBalancer loadBalancer = LoadBalancerFactory.getInstance(rpcConfig.getLoadBalancer());
+            Map<String,Object> requestParams=new HashMap<>();
+            requestParams.put("methodName",rpcRequest.getMethodName()+Thread.currentThread());
+            ServiceMetaInfo selectedserviceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
 
             RpcResponse response = VertxTcpClient.doRequest(rpcRequest, selectedserviceMetaInfo);
             return response.getData();

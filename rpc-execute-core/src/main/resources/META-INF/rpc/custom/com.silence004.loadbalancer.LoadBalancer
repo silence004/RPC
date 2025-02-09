@@ -1,0 +1,3 @@
+roundRobin=com.silence004.loadbalancer.impl.RoundRobinLoadBalancer
+random=com.silence004.loadbalancer.impl.RandomLoadBalancer
+consistentHash=com.silence004.loadbalancer.impl.ConsistentHashLoadBalancer

@@ -1,5 +1,8 @@
 package com.silence004.config;
 
+import com.silence004.loadbalancer.LoadBalancer;
+import com.silence004.loadbalancer.constant.LoadBalancerKeys;
+import com.silence004.loadbalancer.impl.RoundRobinLoadBalancer;
 import com.silence004.serialize.Serializer;
 import com.silence004.serialize.constant.SerislizerKeys;
 import lombok.Data;
@@ -43,4 +46,9 @@ public class RpcConfig {
      * 注册中心
      */
     private RegistryConfig registryConfig= new RegistryConfig();
+
+    /**
+     * 负载均衡器
+     */
+    private String loadBalancer= LoadBalancerKeys.ROUND_ROBIN;
 }
