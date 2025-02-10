@@ -1,6 +1,8 @@
 package com.silence004.config;
 
 import com.silence004.fault.retry.constant.RetryStrategyKeys;
+import com.silence004.fault.tolerant.TolerantStrategy;
+import com.silence004.fault.tolerant.TolerantStrategyKeys;
 import com.silence004.loadbalancer.LoadBalancer;
 import com.silence004.loadbalancer.constant.LoadBalancerKeys;
 import com.silence004.loadbalancer.impl.RoundRobinLoadBalancer;
@@ -57,4 +59,9 @@ public class RpcConfig {
      * 重试策略
      */
     private String retryStrategy= RetryStrategyKeys.NO;
+
+    /**
+     * 容错策略
+     */
+    private String tolerantStrategy= TolerantStrategyKeys.FAIL_FAST;
 }

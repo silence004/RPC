@@ -1,0 +1,2 @@
+failFast=com.silence004.fault.tolerant.impl.FailFastTolerantStrategy
+failSafe=com.silence004.fault.tolerant.impl.FailSafeTolerantStrategy

@@ -9,6 +9,8 @@ import com.silence004.config.RpcConfig;
 import com.silence004.constant.RpcConstant;
 import com.silence004.fault.retry.RetryStrategy;
 import com.silence004.fault.retry.RetryStrategyFactory;
+import com.silence004.fault.tolerant.TolerantStrategy;
+import com.silence004.fault.tolerant.TolerantStrategyFactory;
 import com.silence004.loadbalancer.LoadBalancer;
 import com.silence004.loadbalancer.LoadBalancerFactory;
 import com.silence004.protocol.Enum.ProtocolMessageSerializerEnum;
@@ -58,7 +60,6 @@ public class ServiceProxy implements InvocationHandler {
                 .args(args)
                 .build();
 
-
         try {
             byte[] bytes = serializer.serialize(rpcRequest);
 
@@ -84,11 +85,16 @@ public class ServiceProxy implements InvocationHandler {
             // ------- 发送请求 --------
             //方式2:tcp请求
 //            RpcResponse response = VertxTcpClient.doRequest(rpcRequest, selectedserviceMetaInfo);
-
-            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
-            RpcResponse response=retryStrategy.doRetry(()->
-                    VertxTcpClient.doRequest(rpcRequest,selectedserviceMetaInfo)
-            );
+            RpcResponse response;
+            try {
+                RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+                response=retryStrategy.doRetry(()->
+                        VertxTcpClient.doRequest(rpcRequest,selectedserviceMetaInfo)
+                );
+            } catch (Exception e) {
+                TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+                response=tolerantStrategy.doTolerant(null,e);
+            }
             return response.getData();
         } catch (IOException e) {
             throw new RuntimeException("调用失败");

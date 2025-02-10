@@ -59,6 +59,14 @@ public class VertxTcpClient {
         netClient.connect(serviceMetaInfo.getSerivePort(), serviceMetaInfo.getServiceHost(),
                 result -> {
                     if (result.succeeded()) {
+                        try {
+                            i=0;
+                            int k=5/i;
+                        } catch (RuntimeException e) {
+                            responseFuture.completeExceptionally(e);
+                            throw new RuntimeException("执行出错");
+                        }
+
                         System.out.println("Connect to TCP serve");
                         NetSocket socket = result.result();
                         //构建数据发送
