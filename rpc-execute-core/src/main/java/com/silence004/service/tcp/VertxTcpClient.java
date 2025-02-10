@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 
 
 public class VertxTcpClient {
-
+    static int i=0;
     /**
      * 发送请求
      */
@@ -51,7 +51,7 @@ public class VertxTcpClient {
         });
     }
 
-    public static RpcResponse doRequest(RpcRequest rpcRequest, ServiceMetaInfo serviceMetaInfo) throws ExecutionException, InterruptedException {
+    public static RpcResponse doRequest(RpcRequest rpcRequest, ServiceMetaInfo serviceMetaInfo) throws InterruptedException,ExecutionException {
         //发送tcp请求
         Vertx vertx = Vertx.vertx();
         NetClient netClient = vertx.createNetClient();
@@ -78,6 +78,7 @@ public class VertxTcpClient {
                             Buffer encode = ProtocolMessageEncoder.encode(protocolMessage);
                             socket.write(encode);
                         } catch (Exception e) {
+                            responseFuture.completeExceptionally(e);
                             throw new RuntimeException("协议消息编码错误");
                         }
 
@@ -88,12 +89,13 @@ public class VertxTcpClient {
                                 System.out.println(rpcResponseProtocolMessage);
                                 responseFuture.complete(rpcResponseProtocolMessage.getBody());
                             } catch (Exception e) {
+                                responseFuture.completeExceptionally(e);
                                 throw new RuntimeException("协议消息解码错误");
                             }
                         });
                         socket.handler(tcpBufferHandlerWrapper);
                     } else {
-                        System.out.println("Failed to connect to TCP server");
+                        System.err.println("Failed to connect to TCP server");
                         return ;
                     }
 

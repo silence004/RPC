@@ -1,5 +1,6 @@
 package com.silence004.config;
 
+import com.silence004.fault.retry.constant.RetryStrategyKeys;
 import com.silence004.loadbalancer.LoadBalancer;
 import com.silence004.loadbalancer.constant.LoadBalancerKeys;
 import com.silence004.loadbalancer.impl.RoundRobinLoadBalancer;
@@ -51,4 +52,9 @@ public class RpcConfig {
      * 负载均衡器
      */
     private String loadBalancer= LoadBalancerKeys.ROUND_ROBIN;
+
+    /**
+     * 重试策略
+     */
+    private String retryStrategy= RetryStrategyKeys.NO;
 }

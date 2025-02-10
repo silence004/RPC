@@ -7,6 +7,8 @@ import cn.hutool.http.HttpResponse;
 import com.silence004.RpcApplication;
 import com.silence004.config.RpcConfig;
 import com.silence004.constant.RpcConstant;
+import com.silence004.fault.retry.RetryStrategy;
+import com.silence004.fault.retry.RetryStrategyFactory;
 import com.silence004.loadbalancer.LoadBalancer;
 import com.silence004.loadbalancer.LoadBalancerFactory;
 import com.silence004.protocol.Enum.ProtocolMessageSerializerEnum;
@@ -36,6 +38,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
 //JDK动态代理
@@ -78,7 +81,14 @@ public class ServiceProxy implements InvocationHandler {
             requestParams.put("methodName",rpcRequest.getMethodName()+Thread.currentThread());
             ServiceMetaInfo selectedserviceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
 
-            RpcResponse response = VertxTcpClient.doRequest(rpcRequest, selectedserviceMetaInfo);
+            // ------- 发送请求 --------
+            //方式2:tcp请求
+//            RpcResponse response = VertxTcpClient.doRequest(rpcRequest, selectedserviceMetaInfo);
+
+            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+            RpcResponse response=retryStrategy.doRetry(()->
+                    VertxTcpClient.doRequest(rpcRequest,selectedserviceMetaInfo)
+            );
             return response.getData();
         } catch (IOException e) {
             throw new RuntimeException("调用失败");
