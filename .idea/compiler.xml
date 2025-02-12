@@ -8,10 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="rpc-execute" />
+        <module name="rpc-springboot-starter" />
         <module name="common" />
+        <module name="springboot-consumer-example" />
+        <module name="springboot-provider-example" />
         <module name="provider" />
-        <module name="consumer" />
         <module name="rpc-execute-core" />
+        <module name="consumer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="16" />
@@ -24,6 +27,9 @@
       <module name="rpc" options="" />
       <module name="rpc-execute" options="-parameters" />
       <module name="rpc-execute-core" options="" />
+      <module name="rpc-springboot-starter" options="-parameters" />
+      <module name="springboot-consumer-example" options="-parameters" />
+      <module name="springboot-provider-example" options="-parameters" />
     </option>
   </component>
 </project>
